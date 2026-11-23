@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Venues from "./pages/Venues";
 import VenueDetails from "./pages/VenueDetails";
 import Booking from "./pages/Booking";
+import Gallery from "./pages/Gallery";
 
 function ScrollToHash() {
   const { pathname, hash } = useLocation();
@@ -42,6 +43,7 @@ function Layout() {
           <Route path="/venues" element={<Venues />} />
           <Route path="/venues/:id" element={<VenueDetails />} />
           <Route path="/book" element={<Booking />} />
+          <Route path="/gallery" element={<Gallery />} />
         </Routes>
       </main>
     </>

@@ -543,9 +543,12 @@ function Home() {
     {/* Gallery Button */}
     <div className="text-center mt-12">
 
-      <button className="border border-[#1B3028] text-[#1B3028] px-10 py-4 text-xs uppercase tracking-[3px] hover:bg-[#1B3028] hover:text-white transition duration-300">
+      <Link
+        to="/gallery"
+        className="border border-[#1B3028] text-[#1B3028] px-10 py-4 text-xs uppercase tracking-[3px] hover:bg-[#1B3028] hover:text-white transition duration-300 inline-block"
+      >
         View Full Gallery
-      </button>
+      </Link>
 
     </div>
 
