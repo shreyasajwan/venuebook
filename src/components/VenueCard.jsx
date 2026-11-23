@@ -1,6 +1,7 @@
 import { ArrowUpRight, MapPin, Users } from "lucide-react";
+import { Link } from "react-router-dom";
 
-function VenueCard({ image, name, location, capacity, type, price }) {
+function VenueCard({ id, image, name, location, capacity, type, price }) {
   return (
     <div className="group bg-white overflow-hidden">
 
@@ -50,9 +51,18 @@ function VenueCard({ image, name, location, capacity, type, price }) {
             </p>
           </div>
 
-          <button className="border border-[#C6A56B] p-3 text-[#1B3028] hover:bg-[#C6A56B] transition">
-            <ArrowUpRight size={20} />
-          </button>
+          {id ? (
+            <Link
+              to={`/venues/${id}`}
+              className="border border-[#C6A56B] p-3 text-[#1B3028] hover:bg-[#C6A56B] transition inline-flex"
+            >
+              <ArrowUpRight size={20} />
+            </Link>
+          ) : (
+            <button className="border border-[#C6A56B] p-3 text-[#1B3028] hover:bg-[#C6A56B] transition">
+              <ArrowUpRight size={20} />
+            </button>
+          )}
 
         </div>
 
