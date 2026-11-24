@@ -94,7 +94,27 @@ create policy "Admins delete venues" on public.venues
   for delete using (auth.role() = 'authenticated');
 
 -- ============================================
--- Storage bucket (run via dashboard or SQL)
+-- Indexes
 -- ============================================
--- Create bucket 'venue-gallery' in Supabase Storage (public).
--- Storage policies: public read; authenticated insert/delete.
+create index if not exists bookings_created_at_idx on public.bookings (created_at desc);
+create index if not exists bookings_status_idx on public.bookings (status);
+create index if not exists gallery_category_idx on public.gallery_images (category);
+
+-- ============================================
+-- Storage bucket + policies
+-- ============================================
+insert into storage.buckets (id, name, public)
+values ('venue-gallery', 'venue-gallery', true)
+on conflict (id) do nothing;
+
+create policy "Public read venue-gallery" on storage.objects
+  for select using (bucket_id = 'venue-gallery');
+
+create policy "Admins upload venue-gallery" on storage.objects
+  for insert with check (bucket_id = 'venue-gallery' and auth.role() = 'authenticated');
+
+create policy "Admins update venue-gallery" on storage.objects
+  for update using (bucket_id = 'venue-gallery' and auth.role() = 'authenticated');
+
+create policy "Admins delete venue-gallery" on storage.objects
+  for delete using (bucket_id = 'venue-gallery' and auth.role() = 'authenticated');
