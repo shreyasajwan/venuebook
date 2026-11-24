@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { venues } from "../data/venues";
+import { supabase, isSupabaseConfigured } from "../lib/supabase";
 
 const EVENT_TYPES = [
   "Wedding",
@@ -75,13 +76,30 @@ function BookingForm({ defaultVenue = "", title = "Enquire About Your Event" }) 
     setErrors(v);
     if (Object.keys(v).length > 0) return;
 
+    if (!isSupabaseConfigured()) {
+      setStatus("error");
+      setSubmitError(
+        "Booking service is not configured. Please set Supabase environment variables."
+      );
+      return;
+    }
+
     setStatus("submitting");
     setSubmitError("");
     try {
-      // Frontend-only submission. Replace this with a real API call later.
-      await new Promise((resolve) => setTimeout(resolve, 900));
-      // eslint-disable-next-line no-console
-      console.log("Booking enquiry submitted:", values);
+      const { error } = await supabase.from("bookings").insert({
+        customer_name: values.fullName.trim(),
+        email: values.email.trim(),
+        phone: values.phone.trim(),
+        wedding_date: values.eventDate,
+        venue_name: values.venue,
+        event_type: values.eventType,
+        guest_count: values.guests,
+        budget: values.budget,
+        message: values.message.trim() || null,
+        status: "Pending",
+      });
+      if (error) throw error;
       setStatus("success");
       setValues({
         fullName: "",
@@ -94,9 +112,9 @@ function BookingForm({ defaultVenue = "", title = "Enquire About Your Event" }) 
         budget: "",
         message: "",
       });
-    } catch {
+    } catch (err) {
       setStatus("error");
-      setSubmitError("Something went wrong. Please try again.");
+      setSubmitError(err.message || "Failed to submit enquiry. Please try again.");
     }
   };
 

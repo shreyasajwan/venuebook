@@ -1,4 +1,4 @@
-export const galleryCategories = ["All", "Mandap", "Floral", "Reception", "Mehendi", "Outdoor"];
+export const galleryCategories = ["All", "Mandap", "Floral", "Reception", "Mehendi", "Outdoor", "Haldi", "Stage Decoration"];
 
 export const galleryImages = [
   {

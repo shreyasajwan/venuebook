@@ -1,16 +1,46 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
-import { galleryImages, galleryCategories } from "../data/gallery";
+import { galleryImages as staticImages, galleryCategories } from "../data/gallery";
+import { supabase, isSupabaseConfigured } from "../lib/supabase";
 
 function Gallery() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [lightboxIndex, setLightboxIndex] = useState(null);
+  const [uploaded, setUploaded] = useState([]);
+
+  useEffect(() => {
+    if (!isSupabaseConfigured()) return;
+    (async () => {
+      const { data } = await supabase
+        .from("gallery_images")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (data) {
+        setUploaded(
+          data.map((row) => ({
+            id: `db-${row.id}`,
+            src: row.image_url,
+            alt: row.title,
+            category: row.category,
+          }))
+        );
+      }
+    })();
+  }, []);
+
+  const allImages = useMemo(() => {
+    const staticMapped = staticImages.map((img) => ({
+      ...img,
+      id: `static-${img.id}`,
+    }));
+    return [...uploaded, ...staticMapped];
+  }, [uploaded]);
 
   const filtered = useMemo(() => {
-    if (activeCategory === "All") return galleryImages;
-    return galleryImages.filter((img) => img.category === activeCategory);
-  }, [activeCategory]);
+    if (activeCategory === "All") return allImages;
+    return allImages.filter((img) => img.category === activeCategory);
+  }, [activeCategory, allImages]);
 
   const openLightbox = (index) => setLightboxIndex(index);
   const closeLightbox = () => setLightboxIndex(null);
