@@ -16,7 +16,7 @@ function AdminLayout() {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    if (supabase) await supabase.auth.signOut();
     navigate("/admin/login");
   };
 

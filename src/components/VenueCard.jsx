@@ -18,7 +18,7 @@ function VenueCard({ id, image, name, location, capacity, type, price }) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
 
         {/* Venue Type */}
-        <span className="absolute top-5 left-5 bg-[#F7F4ED] text-[#1B3028] px-4 py-2 text-xs uppercase tracking-widest">
+        <span className="absolute top-5 uib i left-5 bg-[#F7F4ED] text-[#1B3028] px-4 py-2 text-xs uppercase tracking-widest">
           {type}
         </span>
 
